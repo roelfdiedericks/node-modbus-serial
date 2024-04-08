@@ -8,7 +8,7 @@ const crc16 = require("../utils/crc16");
 
 /* TODO: const should be set once, maybe */
 const MODBUS_PORT = 502; // modbus port
-const MAX_TRANSACTIONS = 256; // maximum transaction to wait for
+const MAX_TRANSACTIONS = 32; // maximum transaction to wait for
 const MIN_DATA_LENGTH = 6;
 const MIN_MBAP_LENGTH = 6;
 const CRC_LENGTH = 2;
@@ -126,6 +126,9 @@ class TcpPort extends EventEmitter {
 
                 // reset data
                 data = data.slice(length + MIN_MBAP_LENGTH);
+
+				//eat up the silly DataKom 0x1a byte that they append
+                data = data.slice(1);
             }
         });
 
